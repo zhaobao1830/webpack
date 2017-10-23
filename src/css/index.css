@@ -1,0 +1,8 @@
+body{
+  background-color: aqua;
+}
+#tupian{
+  background-image: url("../images/1.jpg");
+  width: 100px;
+  height: 100px;
+}
