@@ -1,6 +1,10 @@
 const path=require('path');
 const uglify=require('uglifyjs-webpack-plugin');
 const htmlPlugin=require('html-webpack-plugin');
+const extractTextPlugin = require("extract-text-webpack-plugin");
+var website ={
+  publicPath:"http://192.168.0.103:1717/"
+}
 module.exports={
   entry:{
     entry:'./src/entry.js',
@@ -8,13 +12,17 @@ module.exports={
   },
   output:{
     path:path.resolve(__dirname,'dist'),
-    filename:'[name].js'
+    filename:'[name].js',
+    publicPath:website.publicPath
   },
   module:{
     rules:[
       {
-        test:/\.css$/,
-        use: ["style-loader", "css-loader"]
+        test: /\.css$/,
+        use: extractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
       },
       {
         test:/\.(png|jpg|gif)/ ,
@@ -36,11 +44,12 @@ module.exports={
        },
       hash:true,
       template:'./src/index.html'
-    })
+    }),
+    new extractTextPlugin("/css/index.css")
   ],
   devServer:{
     contentBase:path.resolve(__dirname,'dist'),
-    host:'192.168.0.104',
+    host:'192.168.0.103',
     compress:true,
     port:1717
   }
