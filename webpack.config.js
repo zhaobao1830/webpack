@@ -3,7 +3,7 @@ const uglify=require('uglifyjs-webpack-plugin');
 const htmlPlugin=require('html-webpack-plugin');
 const extractTextPlugin = require("extract-text-webpack-plugin");
 var website ={
-  publicPath:"http://192.168.0.103:1717/"
+  publicPath:"http://192.168.0.102:1717/"
 }
 module.exports={
   entry:{
@@ -29,9 +29,26 @@ module.exports={
         use:[{
           loader:'url-loader',
           options:{
-            limit:500000
+            limit:5000,
+            outputPath:'images/'
           }
         }]
+      },
+      {
+        test: /\.(htm|html)$/i,
+        use:[ 'html-withimg-loader']
+      },
+      {
+        test: /\.less$/,
+        use: extractTextPlugin.extract({
+          use: [{
+            loader: "css-loader"
+          }, {
+            loader: "less-loader"
+          }],
+          // use style-loader in development
+          fallback: "style-loader"
+        })
       }
     ]
   },
@@ -45,11 +62,12 @@ module.exports={
       hash:true,
       template:'./src/index.html'
     }),
-    new extractTextPlugin("/css/index.css")
+    // p配置打包后css的位置和名字
+    new extractTextPlugin("css/index.css")
   ],
   devServer:{
     contentBase:path.resolve(__dirname,'dist'),
-    host:'192.168.0.103',
+    host:'192.168.0.102',
     compress:true,
     port:1717
   }
