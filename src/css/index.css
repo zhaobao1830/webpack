@@ -5,4 +5,5 @@ body{
   background-image: url("../images/1.jpg");
   width: 100px;
   height: 100px;
+  transform: rotate(7deg);
 }
