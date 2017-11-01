@@ -51,6 +51,13 @@ module.exports={
           // use style-loader in development
           fallback: "style-loader"
         })
+      },
+      {
+        test: /\.(js)$/,
+        use: {
+          loader: "babel-loader"
+        },
+        exclude:/node_modules/
       }
     ]
   },
