@@ -1,17 +1,24 @@
-const path=require('path');
+const path = require('path');
 const glob = require('glob');
-const uglify=require('uglifyjs-webpack-plugin');
-const htmlPlugin=require('html-webpack-plugin');
+const uglify = require('uglifyjs-webpack-plugin');
+const htmlPlugin = require('html-webpack-plugin');
 const extractTextPlugin = require("extract-text-webpack-plugin");
 const PurifyCSSPlugin = require("purifycss-webpack");
-var website ={
-  publicPath:"http://192.168.0.102:1717/"
+const entry = require("./src/webpack_config/entry_webpack.js");
+const webpack = require('webpack');
+const copyWebpackPlugin = require('copy-webpack-plugin');
+
+if(process.env.type== "build"){
+  var website={
+    publicPath:"http://192.168.0.106:1717/"
+  }
+}else{
+  var website={
+    publicPath:"http://cdn.jspang.com/"
+  }
 }
 module.exports={
-  entry:{
-    entry:'./src/entry.js',
-    entry2:'./src/entry2.js'
-  },
+  entry:entry.path,
   output:{
     path:path.resolve(__dirname,'dist'),
     filename:'[name].js',
@@ -75,11 +82,16 @@ module.exports={
     new extractTextPlugin("css/index.css"),
     new PurifyCSSPlugin({
       paths: glob.sync(path.join(__dirname, 'src/*.html'))
-    })
+    }),
+    new webpack.BannerPlugin('1830'),
+    new copyWebpackPlugin([{
+      from:__dirname+'/src/public',
+      to:'./public'
+    }])
   ],
   devServer:{
     contentBase:path.resolve(__dirname,'dist'),
-    host:'192.168.0.102',
+    host:'192.168.0.106',
     compress:true,
     port:1717
   }
