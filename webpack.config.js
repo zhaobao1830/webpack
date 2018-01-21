@@ -69,7 +69,9 @@ module.exports={
     ]
   },
   plugins:[
+    // 配置JS压缩
     new uglify(),
+    // 打包html文件
     new htmlPlugin({
        minify:{
          // 去掉html页面里的""号
@@ -78,12 +80,16 @@ module.exports={
       hash:true,
       template:'./src/index.html'
     }),
-    // p配置打包后css的位置和名字
+    // 配置打包后css的位置和名字
+    // 默认是把css打包进js文件里，extractTextPlugin是把这个css单独提出来打包
     new extractTextPlugin("css/index.css"),
+    // 使用purifycss-webpack消除未使用的css
     new PurifyCSSPlugin({
       paths: glob.sync(path.join(__dirname, 'src/*.html'))
     }),
+    // 打包以后，添加备注
     new webpack.BannerPlugin('1830'),
+    // 把静态资源文件打包出来
     new copyWebpackPlugin([{
       from:__dirname+'/src/public',
       to:'./public'
